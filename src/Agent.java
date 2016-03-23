@@ -5,10 +5,12 @@ public class Agent {
 	private int x, y;
 	private int pathLen = 0;
 	boolean isTrapped = false;
+	int xMax = 0, xMin =0, yMax= 0, yMin = 0;
+	int xStart,yStart,xEnd,yEnd;
 	
 	public Agent(Lattice lattice) {
 		this.lattice = lattice;
-		x = y = lattice.getSize()/2;	
+		x = y =xStart = yStart= lattice.getSize()/2;	
 	}
 	
 	public void move(){
@@ -18,18 +20,32 @@ public class Agent {
 		switch (moveToMake){
 		case 0:
 			x+=1;
+			if(x > xMax){
+				xMax = x;
+			}
 			break;
 		case 1: 
 			x-=1;
+			if(x < xMin){
+				xMin = x;
+			}
 			break;
 		case 2: 
 			y+=1;
+			if(y > yMax){
+				yMax = y;
+			}
 			break;
 		case 3:
 			y-=1;
+			if(y < yMin){
+				yMin = y;
+			}
 			break;
 		case -1:
 			isTrapped = true;
+			yEnd = y;
+			xEnd = x;
 		default:
 			break;
 		}
@@ -61,6 +77,15 @@ public class Agent {
 	}
 	public int getPathLength(){
 		return pathLen;
+		
+	}
+	public int latticeSize(){
+		//System.out.printf("%d %d %d %d", xMax, xMin, yMax, yMin);
+		return (Math.max(Math.max(xMax, yMax), Math.abs(Math.min(xMin, yMin))));
+		
+	}
+	public int getDistance(){
+		return (Math.abs(xStart - xEnd) + Math.abs(yStart - yEnd));
 		
 	}
 
